@@ -13,7 +13,7 @@ import static java.lang.Math.sqrt;
 public class MainActivity extends AppCompatActivity {
 
     // Different manager for sensor and fragment
-    private SensorManager mSensorManager;
+    public SensorManager mSensorManager;
     public FragmentManager mFragmentManager;
 
     // const

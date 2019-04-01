@@ -1,6 +1,7 @@
 package e.vegard.virtualball;
 
 
+import android.hardware.Sensor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
  */
 public class ThrowFragment extends Fragment {
 
+private MainActivity mainActivity;
+private Sensor accelerometer = mainActivity.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
     public ThrowFragment() {
         // Required empty public constructor
@@ -23,7 +26,13 @@ public class ThrowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_throw, container, false);
+        View v = inflater.inflate(R.layout.fragment_throw, container, false);
+
+        // getting the activity for the fragment
+        mainActivity = ((MainActivity)getActivity());
+
+
+        return v;
     }
 
 }
