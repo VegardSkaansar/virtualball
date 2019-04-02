@@ -60,4 +60,5 @@ public class MainActivity extends AppCompatActivity {
         // this function is going to calculate the acceleration
         return sqrt(x*x + y*y + z*z) - EARTHGRAVITY;
     }
+
 }
