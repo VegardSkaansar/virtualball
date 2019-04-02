@@ -43,6 +43,7 @@ public class VirtualBallFragment extends Fragment {
             public void onClick(View v) {
                 mainActivity.mFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new SettingsFragment(), null)
+                        .addToBackStack(null)
                         .commit();
             }
         });
@@ -52,6 +53,7 @@ public class VirtualBallFragment extends Fragment {
             public void onClick(View v) {
                 mainActivity.mFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new ThrowFragment(), null)
+                        .addToBackStack(null)
                         .commit();
             }
         });
