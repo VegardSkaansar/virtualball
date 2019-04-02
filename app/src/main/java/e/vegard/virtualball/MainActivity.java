@@ -61,4 +61,20 @@ public class MainActivity extends AppCompatActivity {
         return sqrt(x*x + y*y + z*z) - EARTHGRAVITY;
     }
 
+
+
 }
+
+
+/*@Override
+    public void onBackPressed() {
+        // getting the amount of fragments that are being used
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+
+        if (count == 0) {
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+    }*/
