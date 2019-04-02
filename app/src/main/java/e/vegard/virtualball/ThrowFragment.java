@@ -7,15 +7,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.text.DecimalFormat;
+
+import e.vegard.virtualball.Math.MathUtils;
 
 
 /**
@@ -30,7 +31,10 @@ private double accBall;
 
 // const
     private final String TAG = "ThrowFragment";
-    private static DecimalFormat df2 = new DecimalFormat(".##");
+
+    // variable for textviews
+    private TextView second;
+    private TextView dist;
 
     public ThrowFragment() {
         // Required empty public constructor
@@ -39,20 +43,25 @@ private double accBall;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
+
+        setRetainInstance(true);
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_throw, container, false);
 
         // getting the activity for the fragment
         mainActivity = ((MainActivity)getActivity());
 
-        mainActivity.mSensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
-
         // setting sensor
+        mainActivity.mSensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = mainActivity.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         //setting the int to be 0
         accBall = 0;
+
+        // setting the textviews
+        second = v.findViewById(R.id.txt_seconds);
+        dist = v.findViewById(R.id.txt_distance);
 
         // adding event listener to the accelerometer
         SensorEventListener eventListener = new SensorEventListener() {
@@ -62,22 +71,18 @@ private double accBall;
                 double y = event.values[1];
                 double z = event.values[2];
 
-                double acc = mainActivity.acceleration(x, y, z);
+                double acc = MathUtils.acceleration(x, y, z);
 
 
                 //double time =
 
-
+                Log.d(TAG, "acceleration: " + acc);
                 if(acc > 9.81) {
-                    Log.d(TAG, "acceleration: " + acc);
-                    accBall = acc;
+
                     mainActivity.mSensorManager.unregisterListener(this, accelerometer);
-                    double time = accBall / mainActivity.EARTHGRAVITY;
-                    // formula used V^2 = v0^2 + 2a(r-r0)
-                    double distance = (accBall*accBall) / (2*mainActivity.EARTHGRAVITY);
-                    Toast.makeText(getActivity(), "time: " + df2.format(time) + " distance: " + distance, Toast.LENGTH_LONG).show();
+                    setStats(acc);
 
-
+                        // Toast.makeText(getActivity(), "time: " + df2.format(time) + " distance: " + distance, Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -92,6 +97,16 @@ private double accBall;
 
 
         return v;
+    }
+
+    public void setStats(double acc) {
+        accBall = acc;
+        String time = MathUtils.secondsToPoint(accBall);
+        String distance = MathUtils.distanceTravelled(accBall);
+
+        dist.setText(dist.getText().toString() + distance);
+        second.setText(second.getText().toString() + time);
+
     }
 
 }

@@ -16,9 +16,6 @@ public class MainActivity extends AppCompatActivity {
     public SensorManager mSensorManager;
     public FragmentManager mFragmentManager;
 
-    // const
-    public final double EARTHGRAVITY = 9.81;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,32 +30,29 @@ public class MainActivity extends AppCompatActivity {
         // if we have this container
         if (findViewById(R.id.fragment_container) != null) {
 
-            if(savedInstanceState != null) {
+            if (savedInstanceState != null) {
                 return;
             }
 
-            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+            if (savedInstanceState == null) {
+                FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
-            if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-                // if we have this accelerometer sensor we will display
-                // the virtual ball simulation
-                VirtualBallFragment ball = new VirtualBallFragment();
-                fragmentTransaction.add(R.id.fragment_container, ball, null);
-                fragmentTransaction.commit();
+                if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+                    // if we have this accelerometer sensor we will display
+                    // the virtual ball simulation
+                    VirtualBallFragment ball = new VirtualBallFragment();
+                    fragmentTransaction.add(R.id.fragment_container, ball, null);
+                    fragmentTransaction.commit();
 
-            } else {
-                // if we do not have the accelerometer sensor we will display
-                // fragment with a simple text saying the phone does not support the app
-                NoSensor noSensorFragment = new NoSensor();
-                fragmentTransaction.add(R.id.fragment_container, noSensorFragment, null);
-                fragmentTransaction.commit();
+                } else {
+                    // if we do not have the accelerometer sensor we will display
+                    // fragment with a simple text saying the phone does not support the app
+                    NoSensor noSensorFragment = new NoSensor();
+                    fragmentTransaction.add(R.id.fragment_container, noSensorFragment, null);
+                    fragmentTransaction.commit();
+                }
             }
         }
-    }
-
-    public double acceleration(double x, double y, double z) {
-        // this function is going to calculate the acceleration
-        return sqrt(x*x + y*y + z*z) - EARTHGRAVITY;
     }
 
 
