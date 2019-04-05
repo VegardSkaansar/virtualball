@@ -19,6 +19,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 import e.vegard.virtualball.Math.MathUtils;
+import e.vegard.virtualball.Sound.SoundUtils;
 
 
 /**
@@ -32,6 +33,8 @@ private double accBall;
 private Button btnThrow;
 
 private Boolean cooldown = true;
+
+private SoundUtils sound;
 
 
 // const
@@ -72,6 +75,9 @@ private Boolean cooldown = true;
 
         // setting button
         btnThrow = v.findViewById(R.id.btn_startThrow);
+
+        // initializing my sound class
+        sound = new SoundUtils(getContext());
 
 
         // adding event listener to the accelerometer
@@ -126,6 +132,12 @@ private Boolean cooldown = true;
         return v;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        sound.releaseSound();
+    }
+
     // Functionality: Sets the textview time and distance view with math
     // Reason: sets the textview text
     // Extra:
@@ -161,6 +173,7 @@ private Boolean cooldown = true;
                 btnThrow.setEnabled(true);
                 setStats(accBall);
                 viewCooldown.setText("");
+                sound.playStartSound();
 
             }
         }.start();
