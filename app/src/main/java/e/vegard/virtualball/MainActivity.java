@@ -1,12 +1,16 @@
 package e.vegard.virtualball;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import e.vegard.virtualball.Sound.SoundUtils;
 
 import static java.lang.Math.sqrt;
 
@@ -15,6 +19,12 @@ public class MainActivity extends AppCompatActivity {
     // Different manager for sensor and fragment
     public SensorManager mSensorManager;
     public FragmentManager mFragmentManager;
+    public AudioManager audioManager;
+    private SharedPreferences prefs;
+
+    //const
+    public final String SLIDER = "SLIDERVALUE";
+    public final String PROGRESS = "PROGRESSVALUE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Here we get the sensors from the system
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        // Here we get the audiomanager
+        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+        // Here we get the sharedPrefs
+        prefs = getSharedPreferences(SLIDER, MODE_PRIVATE);
 
         // if we have this container
         if (findViewById(R.id.fragment_container) != null) {
@@ -51,24 +67,17 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.add(R.id.fragment_container, noSensorFragment, null);
                     fragmentTransaction.commit();
                 }
+
+                // setting default value on load
+                if (!prefs.contains(PROGRESS)) {
+                    SharedPreferences.Editor edit = prefs.edit();
+                    edit.putInt(PROGRESS, 10);
+                    edit.apply();
+                }
             }
         }
     }
 
 
-
 }
 
-
-/*@Override
-    public void onBackPressed() {
-        // getting the amount of fragments that are being used
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-
-
-        if (count == 0) {
-            super.onBackPressed();
-        } else {
-            getSupportFragmentManager().popBackStack();
-        }
-    }*/
