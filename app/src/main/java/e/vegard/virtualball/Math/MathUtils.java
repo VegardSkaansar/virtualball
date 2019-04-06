@@ -1,6 +1,7 @@
 package e.vegard.virtualball.Math;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import static java.lang.Math.sqrt;
 

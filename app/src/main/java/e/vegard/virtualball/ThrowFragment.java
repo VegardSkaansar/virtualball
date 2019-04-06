@@ -2,6 +2,7 @@ package e.vegard.virtualball;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -17,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import e.vegard.virtualball.Math.MathUtils;
 import e.vegard.virtualball.Sound.SoundUtils;
@@ -29,10 +32,10 @@ public class ThrowFragment extends Fragment {
 
 private MainActivity mainActivity;
 private Sensor accelerometer;
-private double accBall;
 private Button btnThrow;
 
 private Boolean cooldown = true;
+private Boolean userThrow = false;
 
 private SoundUtils sound;
 
@@ -44,6 +47,10 @@ private SoundUtils sound;
     private TextView second;
     private TextView dist;
     private TextView viewCooldown;
+
+    private ArrayList<Double> accArray;
+
+    private SharedPreferences prefs;
 
     public ThrowFragment() {
         // Required empty public constructor
@@ -66,7 +73,7 @@ private SoundUtils sound;
         accelerometer = mainActivity.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         //setting the int to be 0
-        accBall = 0;
+        accArray = new ArrayList<Double>();
 
         // setting the textviews
         second = v.findViewById(R.id.txt_seconds);
@@ -79,6 +86,10 @@ private SoundUtils sound;
         // initializing my sound class
         sound = new SoundUtils(getContext());
 
+        // SharedPreference get the value for the sensor
+        prefs = mainActivity.getSharedPreferences(mainActivity.SLIDER, Context.MODE_PRIVATE);
+        final int constraint = prefs.getInt(mainActivity.PROGRESS, 0);
+
 
         // adding event listener to the accelerometer
        final SensorEventListener eventListener = new SensorEventListener() {
@@ -89,12 +100,11 @@ private SoundUtils sound;
             // Extra:
             @Override
             public void onSensorChanged(SensorEvent event) {
-
                 if(cooldown) {
-                    setCountDown(this);
+                   setCountDown(this);
                     cooldown = false;
                 }
-                
+
                 double x = event.values[0];
                 double y = event.values[1];
                 double z = event.values[2];
@@ -102,8 +112,18 @@ private SoundUtils sound;
                 double acc = MathUtils.acceleration(x, y, z);
 
                 Log.d(TAG, "acceleration: " + acc);
-                if(acc > accBall) {
-                    accBall = acc;
+
+                // this two if statments do so we only record the first
+                // throw, when the constraint user have given have been passed.
+                // the code will take the 20 next acceleration and thats it.
+                // even if you throw mulitple times in the 5 seconds it will only
+                // register the first throw
+                if(constraint < acc) {
+                    userThrow = true;
+                }
+
+                if (userThrow && accArray.size() <= 20){
+                    accArray.add(acc);
                 }
 
             }
@@ -125,6 +145,7 @@ private SoundUtils sound;
                 btnThrow.setEnabled(false);
                 // cooldown functionality is too set the timer of 5 sek
                 cooldown = true;
+                userThrow = false;
             }
         });
 
@@ -154,29 +175,45 @@ private SoundUtils sound;
     // Reason: to get the highest onsensorchanged value in this timeinterval
     // Extra:
     public void setCountDown(final SensorEventListener listener) {
-        new CountDownTimer(5000, 1000) {
+        new CountDownTimer(6000, 1000) {
 
             // Functionality: Every tick update countdown
             // Reason: Make a countdown, update a textview
             // Extra:
             @Override
             public void onTick(long millisUntilFinished) {
-                viewCooldown.setText(String.valueOf(Math.round(millisUntilFinished * 0.001f)));
+                viewCooldown.setText(String.valueOf(Math.round(Math.floor(millisUntilFinished / 1000))));
+                Log.d(TAG, String.valueOf(millisUntilFinished));
             }
 
             // Functionality: When the countdown is finished unregister listener
             // Reason: Solve the problem with when user do the throw
             @Override
             public void onFinish() {
-                mainActivity.mSensorManager.unregisterListener(listener, accelerometer);
-                Log.d(TAG, "onFinish: done");
-                btnThrow.setEnabled(true);
-                setStats(accBall);
+                if (accArray.size() != 0) {
+                    Log.d(TAG, "onFinish: done");
+                    //gets the highest value and send it to the setstats function
+                    setStats(Collections.max(accArray));
+
+                    // resets the timeer to zero text so its not visble
+
+                    // playing the ball sound
+                    sound.playStartSound();
+
+                    // clearing up after the array been used
+                    accArray.clear();
+                } else {
+                    // the user has not got over the acceleration limit the user specified in settings
+                    dist.setText("No distance");
+                    second.setText("No Seconds");
+                }
                 viewCooldown.setText("");
-                sound.playStartSound();
+                mainActivity.mSensorManager.unregisterListener(listener, accelerometer);
+                btnThrow.setEnabled(true);
 
             }
         }.start();
     }
+
 
 }
