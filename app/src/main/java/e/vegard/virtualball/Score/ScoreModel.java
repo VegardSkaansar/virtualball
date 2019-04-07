@@ -1,4 +1,4 @@
-package e.vegard.virtualball.Model;
+package e.vegard.virtualball.Score;
 
 public class ScoreModel {
     private String name;
@@ -6,7 +6,7 @@ public class ScoreModel {
     private double distance;
     private double seconds;
 
-    ScoreModel(String name, int score, int distance, int seconds) {
+    ScoreModel(String name, double score, double distance, double seconds) {
         this.name = name;
         this.score = score;
         this.distance = distance;
