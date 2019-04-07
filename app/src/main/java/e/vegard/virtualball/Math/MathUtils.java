@@ -16,12 +16,17 @@ public class MathUtils {
         return sqrt(x*x + y*y + z*z) - EARTHGRAVITY;
     }
 
-    public static String secondsToPoint(double accBall) {
-        return df2.format(accBall / EARTHGRAVITY);
+    public static double secondsToPoint(double accBall) {
+        return accBall / EARTHGRAVITY;
     }
 
-    public static String distanceTravelled(double accBall) {
+    public static double distanceTravelled(double accBall) {
         // formula used V^2 = v0^2 + 2a(r-r0)
-        return df2.format((accBall * accBall) / (2 * EARTHGRAVITY));
+        return (accBall * accBall) / (2 * EARTHGRAVITY);
+    }
+
+    public static double calculateScore(double distance, double seconds) {
+
+        return (distance * seconds);
     }
 }
