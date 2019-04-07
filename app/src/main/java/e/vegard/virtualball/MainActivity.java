@@ -1,5 +1,7 @@
 package e.vegard.virtualball;
 
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -10,6 +12,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import e.vegard.virtualball.Database.Database;
+import e.vegard.virtualball.Database.DatabaseWrapper;
 import e.vegard.virtualball.Sound.SoundUtils;
 
 import static java.lang.Math.sqrt;
@@ -19,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     // Different manager for sensor and fragment
     public SensorManager mSensorManager;
     public FragmentManager mFragmentManager;
-    public AudioManager audioManager;
+    public DatabaseWrapper database;
     private SharedPreferences prefs;
 
     //const
@@ -37,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         // Here we get the sensors from the system
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        // Here we get the audiomanager
-        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        // Here we get the Database
+        database = new DatabaseWrapper(getApplicationContext(), "scoredb");
 
         // Here we get the sharedPrefs
         prefs = getSharedPreferences(SLIDER, MODE_PRIVATE);
