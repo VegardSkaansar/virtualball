@@ -106,10 +106,6 @@ private static DecimalFormat df2 = new DecimalFormat(".##");
             // Extra:
             @Override
             public void onSensorChanged(SensorEvent event) {
-                if(cooldown) {
-                   setCountDown(this);
-                    cooldown = false;
-                }
 
                 double x = event.values[0];
                 double y = event.values[1];
@@ -130,6 +126,11 @@ private static DecimalFormat df2 = new DecimalFormat(".##");
 
                 if (userThrow && accArray.size() <= 20){
                     accArray.add(acc);
+                    Log.d(TAG, "onSensorChanged: " + accArray.size());
+                } else if (accArray.size() == 21) {
+                    mainActivity.mSensorManager.unregisterListener(this, accelerometer);
+                    double num = Collections.max(accArray);
+                    setCountDown(MathUtils.secondsToPoint(num));
                 }
 
             }
@@ -150,8 +151,9 @@ private static DecimalFormat df2 = new DecimalFormat(".##");
                 // Setting the button to disabled, reason users cant spam the button
                 btnThrow.setEnabled(false);
                 // cooldown functionality is too set the timer of 5 sek
-                cooldown = true;
                 userThrow = false;
+                // sets ready
+                viewCooldown.setText("READY");
             }
         });
 
@@ -211,16 +213,19 @@ private static DecimalFormat df2 = new DecimalFormat(".##");
     // Functionality: 5 seconds tick every sek, after 5 sek unregisterlistener
     // Reason: to get the highest onsensorchanged value in this timeinterval
     // Extra:
-    public void setCountDown(final SensorEventListener listener) {
-        new CountDownTimer(6000, 1000) {
+    public void setCountDown(Double count) {
+
+        long i = Math.round(count * 1000);
+        Log.d(TAG, "setCountDown: " + i);
+        new CountDownTimer(i, 1000) {
 
             // Functionality: Every tick update countdown
             // Reason: Make a countdown, update a textview
             // Extra:
             @Override
             public void onTick(long millisUntilFinished) {
-                viewCooldown.setText(String.valueOf(Math.round(Math.floor(millisUntilFinished / 1000))));
-                Log.d(TAG, String.valueOf(millisUntilFinished));
+                viewCooldown.setText(""+ Math.round(Math.floor(millisUntilFinished / 1000)));
+                Log.d(TAG, String.valueOf(millisUntilFinished / 1000));
             }
 
             // Functionality: When the countdown is finished unregister listener
@@ -246,7 +251,6 @@ private static DecimalFormat df2 = new DecimalFormat(".##");
                     second.setText("No Seconds");
                 }
                 viewCooldown.setText("");
-                mainActivity.mSensorManager.unregisterListener(listener, accelerometer);
                 btnThrow.setEnabled(true);
 
             }

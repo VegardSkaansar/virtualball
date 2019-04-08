@@ -21,14 +21,15 @@ project.
 - Then install it on your android phone, warning (is developed for API 19)
 - Then if the phone have the accelerometer you will see 3 buttons.
 - Settings button you change the min value for what acceleration will be and detected
-- Throw button will open up another tab and if u hit the start button you will be given
-  6-5 seconds to perform one throw, will only register first throw.
+- Throw button will open up a tab where u press start and u will see the ready text
+  That means you can throw
 - Score button will show ur results, and the first time using the app it should be empty
 - Thats all.
 
-The reason for introducing the 5 sek countdown was to give an element
-of focus and more precise throws. The throw simulation will happend after the countdown. But 
-the user have to do the throw in the interval of the countdown.
+When you see the ready text the listener will wait for a acceleration over the threshold 
+specified in settings. When the acceleration are over the threshold. The next 20 values will be 
+recorded. After that, the listener will stop and start a countdown. This countdown counts down 
+til the ball highest point and plays the sound football kick.
 
 ## The logic behind catch a throw
 In the settings tab will we set a value of an acceleration min value. When we throw
@@ -60,6 +61,10 @@ SoundUtils
 ## Extra
 The recyclerview will show the top 5 highest ever scored throws.
 And plays a sound when the top is reached
-Assuming the throw happends after the 5 seconds, but the user has
-to do the throw inside the interval
+The project have tests too and read about that under tests.
+
+## Code organisation
+The code are organized in a single package with multiple folders, 
+And the name of the folder indicates what the classes are been used for
+
 
