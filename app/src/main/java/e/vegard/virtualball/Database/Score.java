@@ -17,7 +17,8 @@ public class Score {
 
     private double score;
 
-    public Score(String name, double distance, double seconds, double score) {
+    public Score(int id, String name, double distance, double seconds, double score) {
+        this.id = id;
         this.name = name;
         this.distance = distance;
         this.seconds = seconds;
