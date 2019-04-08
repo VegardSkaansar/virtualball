@@ -12,6 +12,11 @@ import e.vegard.virtualball.Fragment.ScoreModel;
 
 import static android.content.ContentValues.TAG;
 
+/*
+* We need a wrapper for our database and run the function as asynctask
+* Reason behind this is that we dont want to freeze the Main thread UI
+* Therefore we will run them on seperate threads
+* */
 public class DatabaseWrapper {
 
     private Database mDB;
@@ -22,6 +27,7 @@ public class DatabaseWrapper {
         this.mDB = Room.databaseBuilder(ctx, Database.class, dbName).build();
     }
 
+    // Insert into Room Database
     public void insertToDBScore(ScoreModel mScore) {
 
         Score score = new Score(getAmountOfRows()+1,mScore.getName(), mScore.getDistance(), mScore.getSeconds(), mScore.getScore());

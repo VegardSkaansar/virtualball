@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     public final String SLIDER = "SLIDERVALUE";
     public final String PROGRESS = "PROGRESSVALUE";
 
-    public String input;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
         // Here we get the Database
         database = new DatabaseWrapper(getApplicationContext(), "scoredb");
-
-        // input
-        input = "";
 
         // Here we get the sharedPrefs
         prefs = getSharedPreferences(SLIDER, MODE_PRIVATE);
@@ -85,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         }
     }
 
+    // starts the popup window and sends with the info we need for adding
+    // into database
     public void setPopup(int id, double score, double distance, double time) {
 
         Bundle bundle = new Bundle();

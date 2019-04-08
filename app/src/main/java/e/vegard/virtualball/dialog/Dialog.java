@@ -14,6 +14,11 @@ import android.widget.EditText;
 
 import e.vegard.virtualball.R;
 
+/*
+This class is responsible for making a popup window with dialogfragment
+Reason: when a new record is set we need somewhere to put in who
+        did the record
+ */
 public class Dialog extends AppCompatDialogFragment {
 
     private EditText editName;
@@ -32,6 +37,7 @@ public class Dialog extends AppCompatDialogFragment {
     public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // we get the bundle as a argument from fragment
         bundle = getArguments();
         score = bundle.getDouble("score");
         distance = bundle.getDouble("distance");
