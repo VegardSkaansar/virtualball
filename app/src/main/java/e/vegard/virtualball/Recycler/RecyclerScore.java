@@ -1,15 +1,15 @@
 package e.vegard.virtualball.Recycler;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
-import e.vegard.virtualball.Score.ScoreModel;
+import e.vegard.virtualball.ScoreModel;
 import e.vegard.virtualball.R;
 
 public class RecyclerScore extends RecyclerView.Adapter<RecyclerScore.ScoreHolder> {
@@ -31,9 +31,8 @@ public class RecyclerScore extends RecyclerView.Adapter<RecyclerScore.ScoreHolde
         mScoreBoard = scores;
     }
 
-    @NonNull
     @Override
-    public ScoreHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+    public ScoreHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_scoreboard, parent, false);
         ScoreHolder holder = new ScoreHolder(v);
@@ -41,16 +40,17 @@ public class RecyclerScore extends RecyclerView.Adapter<RecyclerScore.ScoreHolde
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ScoreHolder holder, int i) {
+    public void onBindViewHolder(ScoreHolder holder, int i) {
+        DecimalFormat df2 = new DecimalFormat(".##");
         final ScoreModel scoreBoard = mScoreBoard.get(i);
-        ((TextView)holder.scoreView.findViewById(R.id.txt_ScoreName)).setText(scoreBoard.getName());
-        ((TextView)holder.scoreView.findViewById(R.id.txt_Score)).setText("" + scoreBoard.getScore());
-        ((TextView)holder.scoreView.findViewById(R.id.txt_ScoreSecond)).setText("" + scoreBoard.getSeconds());
-        ((TextView)holder.scoreView.findViewById(R.id.txt_ScoreDistance)).setText("" + scoreBoard.getDistance());
+        ((TextView)holder.scoreView.findViewById(R.id.txt_ScoreName)).setText("Name: " + scoreBoard.getName());
+        ((TextView)holder.scoreView.findViewById(R.id.txt_Score)).setText("" + df2.format(scoreBoard.getScore()));
+        ((TextView)holder.scoreView.findViewById(R.id.txt_ScoreSecond)).setText("Seconds: " + df2.format(scoreBoard.getSeconds()));
+        ((TextView)holder.scoreView.findViewById(R.id.txt_ScoreDistance)).setText("Distance: " + df2.format(scoreBoard.getDistance()) + " meter");
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mScoreBoard.size();
     }
 }
