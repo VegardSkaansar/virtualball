@@ -1,24 +1,22 @@
 package e.vegard.virtualball;
 
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
-import e.vegard.virtualball.Database.Database;
+import java.util.List;
+
 import e.vegard.virtualball.Database.DatabaseWrapper;
-import e.vegard.virtualball.Sound.SoundUtils;
+import e.vegard.virtualball.Database.Score;
+import e.vegard.virtualball.Math.MathUtils;
 
-import static java.lang.Math.sqrt;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Dialog.DialogListner {
 
     // Different manager for sensor and fragment
     public SensorManager mSensorManager;
@@ -29,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     //const
     public final String SLIDER = "SLIDERVALUE";
     public final String PROGRESS = "PROGRESSVALUE";
+
+    public String input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Here we get the Database
         database = new DatabaseWrapper(getApplicationContext(), "scoredb");
+
+        // input
+        input = "";
 
         // Here we get the sharedPrefs
         prefs = getSharedPreferences(SLIDER, MODE_PRIVATE);
@@ -82,6 +85,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setPopup(int id, double score, double distance, double time) {
 
+        Bundle bundle = new Bundle();
+        bundle.putDouble("score", score);
+        bundle.putDouble("distance", distance);
+        bundle.putDouble("time", time);
+        bundle.putInt("id", id);
+
+        e.vegard.virtualball.Dialog dialog = new e.vegard.virtualball.Dialog();
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(), "dialog");
+    }
+
+
+
+    @Override
+    public void applyTexts(int id, String name, double score, double distance, double time) {
+        if (id == -1) {
+            ScoreModel newScore = new ScoreModel(name, score, distance, time);
+            database.insertToDBScore(newScore);
+        } else {
+            ScoreModel newScore = new ScoreModel(name, score, distance, time);
+            database.UpdateScore(newScore, id);
+        }
+
+    }
 }
 

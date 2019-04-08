@@ -1,10 +1,12 @@
-package e.vegard.virtualball.Score;
+package e.vegard.virtualball;
+
 
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import e.vegard.virtualball.Database.Score;
-import e.vegard.virtualball.MainActivity;
-import e.vegard.virtualball.R;
 import e.vegard.virtualball.Recycler.RecyclerScore;
 
 /**
@@ -39,9 +39,9 @@ public class ScoreFragment extends Fragment {
         mainActivity = ((MainActivity) getActivity());
 
         mRecycleView = v.findViewById(R.id.recyclerScore);
-        mRecycleView.setLayoutManager(new LinearLayoutManager(mainActivity));
+        mRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        List<Score> scores = mainActivity.database.mydao().getScores();
+        List<Score> scores = mainActivity.database.getFromDBScore();
         List<ScoreModel> model = new ArrayList<>();
 
         for(Score score : scores) {
@@ -50,8 +50,14 @@ public class ScoreFragment extends Fragment {
             double distance = score.getDistance();
             double sc = score.getScore();
 
+            Log.d("Inside", score.getName());
+
             ScoreModel input = new ScoreModel(name, sc, distance, seconds);
             model.add(input);
+        }
+
+        for(ScoreModel tmp : model){
+            Log.d("scoremodel", tmp.getName());
         }
 
         mRecycleView.setAdapter(new RecyclerScore(model));

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import e.vegard.virtualball.Score.ThrowFragment;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +18,7 @@ public class VirtualBallFragment extends Fragment {
 
     private Button btnSettings;
     private Button btnThrow;
+    private Button btnScoreBoard;
     private MainActivity mainActivity;
 
     public VirtualBallFragment() {
@@ -32,6 +35,7 @@ public class VirtualBallFragment extends Fragment {
         // setting buttons views
         btnSettings = v.findViewById(R.id.btn_settings);
         btnThrow = v.findViewById(R.id.btn_throw);
+        btnScoreBoard = v.findViewById(R.id.btn_scoreboard);
 
         // here we will initilaize the variable and get our mainactivity
         // so we can store values from fragments to the activity
@@ -53,6 +57,16 @@ public class VirtualBallFragment extends Fragment {
             public void onClick(View v) {
                 mainActivity.mFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, new ThrowFragment(), null)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        btnScoreBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.mFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, new ScoreFragment(), null)
                         .addToBackStack(null)
                         .commit();
             }

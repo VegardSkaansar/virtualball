@@ -1,11 +1,8 @@
-package e.vegard.virtualball;
+package e.vegard.virtualball.Score;
 
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -27,7 +23,10 @@ import java.util.Collections;
 import java.util.List;
 
 import e.vegard.virtualball.Database.Score;
+import e.vegard.virtualball.MainActivity;
 import e.vegard.virtualball.Math.MathUtils;
+import e.vegard.virtualball.R;
+import e.vegard.virtualball.ScoreModel;
 import e.vegard.virtualball.Sound.SoundUtils;
 
 
@@ -39,7 +38,6 @@ public class ThrowFragment extends Fragment {
 private MainActivity mainActivity;
 private Sensor accelerometer;
 private Button btnThrow;
-private Dialog dialog;
 
 private Boolean cooldown = true;
 private Boolean userThrow = false;
@@ -80,9 +78,6 @@ private static DecimalFormat df2 = new DecimalFormat(".##");
         // setting sensor
         mainActivity.mSensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = mainActivity.mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-        // setting dialog
-        dialog = new Dialog(mainActivity);
 
         //setting the int to be 0
         accArray = new ArrayList<Double>();
@@ -184,44 +179,35 @@ private static DecimalFormat df2 = new DecimalFormat(".##");
     }
 
     public void checkForTopFive(double acc) {
+
         double time = MathUtils.secondsToPoint(acc);
         double distance = MathUtils.distanceTravelled(acc);
         double score = MathUtils.calculateScore(distance, time);
 
-        List<Score> mScore = mainActivity.database.mydao().getScores();
+        int nr = mainActivity.database.getAmountOfRows();
 
-        int nr = mainActivity.database.mydao().getNumberOfRows();
+        Log.d("check", "checkForTopFive: " + nr);
 
         if (nr < 5) {
-            Score newScore = new Score();
-            newScore.setId(nr+1);
-            newScore.setDistance(distance);
-            newScore.setScore(score);
-            newScore.setName(setPopup());
+            mainActivity.setPopup(-1, score, distance, time);
+        } else {
+            List<Score> mScore = mainActivity.database.getFromDBScore();
+            double lowest = 1000000000;
+            Score obj = null;
+            for (Score one : mScore) {
+                if(one.getScore() < lowest) {
+                    lowest = one.getScore();
+                    obj = one;
+                }
+            }
+
+            if (lowest < score) {
+                mainActivity.setPopup(obj.getId(),score, distance, time);
+            }
         }
 
-
-
     }
 
-    public String setPopup() {
-
-        dialog.setContentView(R.layout.popup_fill_name);
-        EditText name = dialog.findViewById(R.id.popupName);
-        Button btnContinue = dialog.findViewById(R.id.btn_continue);
-
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-
-        return name.getText().toString();
-    }
 
     // Functionality: 5 seconds tick every sek, after 5 sek unregisterlistener
     // Reason: to get the highest onsensorchanged value in this timeinterval
@@ -267,6 +253,5 @@ private static DecimalFormat df2 = new DecimalFormat(".##");
             }
         }.start();
     }
-
 
 }
