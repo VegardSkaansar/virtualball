@@ -24,6 +24,8 @@ public interface dao {
     @Query("DELETE FROM scores")
     public void deleteAll();
 
+
+
     @Update
     public void changeScore(Score score);
 

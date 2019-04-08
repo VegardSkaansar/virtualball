@@ -23,10 +23,9 @@ import java.util.Collections;
 import java.util.List;
 
 import e.vegard.virtualball.Database.Score;
-import e.vegard.virtualball.MainActivity;
+import e.vegard.virtualball.Fragment.MainActivity;
 import e.vegard.virtualball.Math.MathUtils;
 import e.vegard.virtualball.R;
-import e.vegard.virtualball.ScoreModel;
 import e.vegard.virtualball.Sound.SoundUtils;
 
 

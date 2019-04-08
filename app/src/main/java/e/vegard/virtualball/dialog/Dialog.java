@@ -1,4 +1,4 @@
-package e.vegard.virtualball;
+package e.vegard.virtualball.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+
+import e.vegard.virtualball.R;
 
 public class Dialog extends AppCompatDialogFragment {
 

@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import e.vegard.virtualball.ScoreModel;
+import e.vegard.virtualball.Fragment.ScoreModel;
 
 import static android.content.ContentValues.TAG;
 

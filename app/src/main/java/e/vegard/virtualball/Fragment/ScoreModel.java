@@ -1,4 +1,4 @@
-package e.vegard.virtualball;
+package e.vegard.virtualball.Fragment;
 
 public class ScoreModel {
     private String name;

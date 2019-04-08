@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import e.vegard.virtualball.ScoreModel;
+import e.vegard.virtualball.Fragment.ScoreModel;
 import e.vegard.virtualball.R;
 
 public class RecyclerScore extends RecyclerView.Adapter<RecyclerScore.ScoreHolder> {

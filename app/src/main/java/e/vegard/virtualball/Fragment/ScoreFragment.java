@@ -1,4 +1,4 @@
-package e.vegard.virtualball;
+package e.vegard.virtualball.Fragment;
 
 
 
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import e.vegard.virtualball.Database.Score;
+import e.vegard.virtualball.R;
 import e.vegard.virtualball.Recycler.RecyclerScore;
 
 /**

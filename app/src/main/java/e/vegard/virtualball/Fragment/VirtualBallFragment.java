@@ -1,4 +1,4 @@
-package e.vegard.virtualball;
+package e.vegard.virtualball.Fragment;
 
 
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import e.vegard.virtualball.R;
 import e.vegard.virtualball.Score.ThrowFragment;
 
 

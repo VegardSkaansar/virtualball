@@ -1,4 +1,4 @@
-package e.vegard.virtualball;
+package e.vegard.virtualball.Fragment;
 
 
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import e.vegard.virtualball.R;
 
 
 /**

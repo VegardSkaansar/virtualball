@@ -4,7 +4,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
-import e.vegard.virtualball.MainActivity;
 import e.vegard.virtualball.R;
 
 public class SoundUtils {

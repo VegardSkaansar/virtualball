@@ -1,4 +1,4 @@
-package e.vegard.virtualball;
+package e.vegard.virtualball.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,13 +8,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-
-import java.util.List;
 
 import e.vegard.virtualball.Database.DatabaseWrapper;
-import e.vegard.virtualball.Database.Score;
-import e.vegard.virtualball.Math.MathUtils;
+import e.vegard.virtualball.Fragment.NoSensor;
+import e.vegard.virtualball.Fragment.ScoreModel;
+import e.vegard.virtualball.Fragment.VirtualBallFragment;
+import e.vegard.virtualball.R;
+import e.vegard.virtualball.dialog.Dialog;
 
 public class MainActivity extends AppCompatActivity implements Dialog.DialogListner {
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         bundle.putDouble("time", time);
         bundle.putInt("id", id);
 
-        e.vegard.virtualball.Dialog dialog = new e.vegard.virtualball.Dialog();
+        Dialog dialog = new Dialog();
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "dialog");
     }
