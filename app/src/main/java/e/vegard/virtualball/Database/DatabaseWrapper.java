@@ -1,7 +1,6 @@
 package e.vegard.virtualball.Database;
 
 import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -9,7 +8,7 @@ import android.util.Log;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import e.vegard.virtualball.Score.ScoreModel;
+import e.vegard.virtualball.ScoreModel;
 
 import static android.content.ContentValues.TAG;
 
@@ -25,7 +24,7 @@ public class DatabaseWrapper {
 
     public void insertToDBScore(ScoreModel mScore) {
 
-        Score score = new Score(mScore.getName(), mScore.getDistance(), mScore.getSeconds(), mScore.getScore());
+        Score score = new Score(getAmountOfRows()+1,mScore.getName(), mScore.getDistance(), mScore.getSeconds(), mScore.getScore());
 
         new AsyncTask<Score, Void, Void>() {
 
@@ -58,6 +57,53 @@ public class DatabaseWrapper {
             Log.e(TAG, e.getMessage());
         }
         return tmp;
+    }
+
+    public int getAmountOfRows() {
+        int i = 0;
+
+        try {
+            i =new AsyncTask<Void, Void, Integer>() {
+
+                @Override
+                protected Integer doInBackground(Void... voids) {
+                    return mDB.mydao().getNumberOfRows();
+                }
+            }.execute().get();
+        }
+        catch (ExecutionException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        return i;
+    }
+
+    public void DeleteAll() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                mDB.mydao().deleteAll();
+                return null;
+            }
+        }.execute();
+    }
+
+    public void UpdateScore(ScoreModel mScore, int id) {
+
+        Score score = new Score(id ,mScore.getName(), mScore.getDistance(), mScore.getSeconds(), mScore.getScore());
+
+     new AsyncTask<Score, Void, Void>() {
+
+         @Override
+         protected Void doInBackground(Score... scores) {
+             mDB.mydao().changeScore(scores[0]);
+             return null;
+         }
+     }.execute(score);
     }
 
 }
