@@ -67,4 +67,8 @@ The project have tests too and read about that under tests.
 The code are organized in a single package with multiple folders, 
 And the name of the folder indicates what the classes are been used for
 
+## Sliding Window
+I used 20 readings for this window, was developing on a API 19 phone, worked well for
+this version
+
 
