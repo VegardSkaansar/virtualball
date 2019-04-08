@@ -26,6 +26,10 @@ project.
 - Score button will show ur results, and the first time using the app it should be empty
 - Thats all.
 
+The reason for introducing the 5 sek countdown was to give an element
+of focus and more precise throws. The throw simulation will happend after the countdown. But 
+the user have to do the throw in the interval of the countdown.
+
 ## The logic behind catch a throw
 In the settings tab will we set a value of an acceleration min value. When we throw
 the acceleration will go over this limit, and we take the 20 first reading after surpassing 
@@ -53,5 +57,9 @@ results of the scores
 Sound class i made playing a football kick after the calculations have happend
 SoundUtils
 
-
+## Extra
+The recyclerview will show the top 5 highest ever scored throws.
+And plays a sound when the top is reached
+Assuming the throw happends after the 5 seconds, but the user has
+to do the throw inside the interval
 
