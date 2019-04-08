@@ -41,7 +41,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="156dp"
         android:layout_marginEnd="8dp"
-        android:text="Press the button and do your throw inside the countdown"
+        android:text="Press the button and do your throw inside the countdown interval"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"

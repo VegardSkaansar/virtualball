@@ -54,7 +54,7 @@ The database i used in this app is the Room. And are used to saving the
 results of the scores
 
 ## Sound
-Sound class i made playing a football kick after the calculations have happend
+Sound class i made playing a football kick after the calculations and reach the top
 SoundUtils
 
 ## Extra
